@@ -30,10 +30,11 @@ class _TimerPageState extends State<TimerPage> {
     super.initState();
     FlutterForegroundTask.addTaskDataCallback(_onReceiveTaskData);
 
+    //This runs immediately after the UI has finished rendering
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _requestPermissions();
       _initTimerService();
-    })
+      _startTimerService();
+    });
 
     _uiUpdateTimer = Timer.periodic(
         const Duration(seconds: 1),
@@ -116,20 +117,6 @@ class _TimerPageState extends State<TimerPage> {
     }
   }
 
-  Future<void> _requestPermissions() async {
-    final NotificationPermission notificationPermission =
-        await FlutterForegroundTask.checkNotificationPermission();
-
-    if (notificationPermission != NotificationPermission.granted) {
-      await FlutterForegroundTask.requestNotificationPermission();
-    }
-
-    if (Platform.isAndroid) {
-      if (!await FlutterForegroundTask.isIgnoringBatteryOptimizations) {
-        await FlutterForegroundTask.requestIgnoreBatteryOptimization();
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -142,10 +129,12 @@ class _TimerPageState extends State<TimerPage> {
         previousText = "Last Rest";
         statusText = "Focusing";
         mainButtonText = "Take a Rest";
+        break;
       case TimerState.rest:
         previousText = "Last Focus";
         statusText = "Resting";
         mainButtonText = "Start Focused Work";
+        break;
     }
 
     return Scaffold(

@@ -1,6 +1,5 @@
 package me.rooshi.my_focus_app
 
-import com.pravera.flutter_foreground_task.FlutterForegroundTaskPlugin
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 
