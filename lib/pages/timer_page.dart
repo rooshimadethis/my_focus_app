@@ -32,8 +32,9 @@ class _TimerPageState extends State<TimerPage> {
 
     //This runs immediately after the UI has finished rendering
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _initTimerService();
-      _startTimerService();
+      //If I cant get a handle on the service then? should I keep it here?
+      initTimerService();
+      startTimerService();
     });
 
     _uiUpdateTimer = Timer.periodic(
@@ -57,6 +58,7 @@ class _TimerPageState extends State<TimerPage> {
     super.dispose();
   }
 
+  //TODO update UI based on timer from foreground task
   void _onReceiveTaskData(Object data) {
     //data is a map of all objects sent, String key, any type object value
     if (data is Map<String, dynamic>) {
@@ -64,7 +66,15 @@ class _TimerPageState extends State<TimerPage> {
     }
   }
 
+  //TODO reset foreground timer
   void _startFocus() {
+    Map<String, dynamic> data = {
+      "stateChange": {
+        "newState": "startFocus"
+      }
+    };
+    FlutterForegroundTask.sendDataToTask(data);
+
     setState(() {
       _currentTimerState = TimerState.focus;
       _previousTime = _mainStopwatch.elapsed;
@@ -72,7 +82,15 @@ class _TimerPageState extends State<TimerPage> {
     });
   }
 
+  //TODO reset foreground timer
   void _startRest() {
+    Map<String, dynamic> data = {
+      "stateChange": {
+        "newState": "startRest"
+      }
+    };
+    FlutterForegroundTask.sendDataToTask(data);
+
     setState(() {
       _currentTimerState = TimerState.rest;
       _previousTime = _mainStopwatch.elapsed;
@@ -80,42 +98,7 @@ class _TimerPageState extends State<TimerPage> {
     });
   }
 
-  void _initTimerService() {
-    FlutterForegroundTask.init(
-        androidNotificationOptions: AndroidNotificationOptions(
-            channelId: 'foreground_service',
-            channelName: 'Foreground Service Notification',
-            channelDescription: 'This notification appears when the foreground service is running.',
-            onlyAlertOnce: true
-        ),
-        iosNotificationOptions: IOSNotificationOptions(
-          showNotification: true,
-          playSound: true
-        ),
-        foregroundTaskOptions: ForegroundTaskOptions(
-            eventAction: ForegroundTaskEventAction.repeat(1000),
-          // autoRunOnMyPackageReplaced: true
-          // allowWakeLock: true
-        )
-    );
-  }
-
-  Future<ServiceRequestResult> _startTimerService() async {
-    if (await FlutterForegroundTask.isRunningService) {
-      return FlutterForegroundTask.restartService();
-    } else {
-      return FlutterForegroundTask.startService(
-          serviceId: 1337,
-          notificationTitle: 'Foreground Service is running',
-          notificationText: 'Tap to return to the app',
-        notificationButtons: [
-          const NotificationButton(id: 'hello', text: 'hello')
-        ],
-        notificationInitialRoute: '/',
-        callback: startCallback,
-      );
-    }
-  }
+  //fixme can i move these to the other file
 
 
   @override
