@@ -21,8 +21,7 @@ enum TimerState {
 
 class _TimerPageState extends State<TimerPage> {
   TimerState _currentTimerState = TimerState.focus;
-  final _mainStopwatch = Stopwatch();
-  Timer? _uiUpdateTimer;
+  Duration _currentTime = Duration();
   Duration _previousTime = Duration();
 
   @override
@@ -32,24 +31,10 @@ class _TimerPageState extends State<TimerPage> {
 
     //This runs immediately after the UI has finished rendering
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      //If I cant get a handle on the service then? should I keep it here?
       initTimerService();
       startTimerService();
     });
 
-    _uiUpdateTimer = Timer.periodic(
-        const Duration(seconds: 1),
-        (timer) {
-          if (!mounted) {
-            timer.cancel();
-            return;
-          }
-          if (_mainStopwatch.isRunning) {
-            setState(() {});
-          }
-        });
-
-    _mainStopwatch.start();
   }
 
   @override
@@ -60,46 +45,43 @@ class _TimerPageState extends State<TimerPage> {
 
   //TODO update UI based on timer from foreground task
   void _onReceiveTaskData(Object data) {
-    //data is a map of all objects sent, String key, any type object value
     if (data is Map<String, dynamic>) {
-
+      if (data.containsKey("newTime")) {
+        _currentTime = Duration(seconds: data["newTime"]);
+        setState(() {});
+      }
     }
   }
 
-  //TODO reset foreground timer
   void _startFocus() {
+    setState(() {
+      _currentTimerState = TimerState.focus;
+      _previousTime = _currentTime;
+      _currentTime = Duration();
+    });
+
     Map<String, dynamic> data = {
       "stateChange": {
         "newState": "startFocus"
       }
     };
     FlutterForegroundTask.sendDataToTask(data);
-
-    setState(() {
-      _currentTimerState = TimerState.focus;
-      _previousTime = _mainStopwatch.elapsed;
-      _mainStopwatch.reset();
-    });
   }
 
-  //TODO reset foreground timer
   void _startRest() {
+    setState(() {
+      _currentTimerState = TimerState.rest;
+      _previousTime = _currentTime;
+      _currentTime = Duration();
+    });
+
     Map<String, dynamic> data = {
       "stateChange": {
         "newState": "startRest"
       }
     };
     FlutterForegroundTask.sendDataToTask(data);
-
-    setState(() {
-      _currentTimerState = TimerState.rest;
-      _previousTime = _mainStopwatch.elapsed;
-      _mainStopwatch.reset();
-    });
   }
-
-  //fixme can i move these to the other file
-
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +136,7 @@ class _TimerPageState extends State<TimerPage> {
                     spacing: 3.0,
                     children: [
                       Text('Current Block', style: Theme.of(context).textTheme.bodyLarge),
-                      Text(formatStopwatchInMinutesSeconds(_mainStopwatch.elapsed), style: Theme.of(context).textTheme.displayLarge),
+                      Text(formatStopwatchInMinutesSeconds(_currentTime), style: Theme.of(context).textTheme.displayLarge),
                       Text(statusText, style: Theme.of(context).textTheme.titleLarge)
                     ],
                   ),

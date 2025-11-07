@@ -4,6 +4,7 @@ import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 
 import 'formatters.dart';
 
+// --------- Foreground Service ---------
 void initTimerService() {
   FlutterForegroundTask.init(
       androidNotificationOptions: AndroidNotificationOptions(
@@ -30,8 +31,8 @@ Future<ServiceRequestResult> startTimerService() async {
   } else {
     return FlutterForegroundTask.startService(
       serviceId: 1337,
-      notificationTitle: 'Foreground Service is running',
-      notificationText: 'Tap to return to the app',
+      notificationTitle: '00:00',
+      notificationText: 'Focusing',
       notificationButtons: [
         const NotificationButton(id: 'hello', text: 'hello')
       ],
@@ -41,12 +42,13 @@ Future<ServiceRequestResult> startTimerService() async {
   }
 }
 
-
 @pragma('vm:entry-point')
 void startCallback() {
   FlutterForegroundTask.setTaskHandler(ForegroundTimerHandler());
 }
 
+
+// --------- Timer Functionality ---------
 class ForegroundTimerHandler extends TaskHandler {
   Stopwatch? _stopwatch;
   Timer? _timer;
@@ -54,6 +56,23 @@ class ForegroundTimerHandler extends TaskHandler {
   @override
   Future<void> onStart(DateTime timestamp, TaskStarter starter) async {
     _stopwatch = Stopwatch();
+    _stopwatch?.start();
+
+    //This works as a test, but maybe repeatEvent would be better
+    //This needs to update the notification and send data back to the UI
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      print(_stopwatch?.elapsed);
+        //Update Notification
+        FlutterForegroundTask.updateService(
+            notificationTitle: formatStopwatchInMinutesSeconds(
+                _stopwatch!.elapsed)
+        );
+        //Update UI
+        Map<String, dynamic> data = {
+          "newTime": _stopwatch!.elapsed.inSeconds
+        };
+        FlutterForegroundTask.sendDataToMain(data);
+    });
   }
 
   @override
@@ -68,6 +87,7 @@ class ForegroundTimerHandler extends TaskHandler {
   void onRepeatEvent(DateTime timestamp) {
     // can be used to send data back
     // FlutterForegroundTask.sendDataToMain(data)
+    //TODO will be called every second
   }
 
   //Receive Data
@@ -80,33 +100,33 @@ class ForegroundTimerHandler extends TaskHandler {
       if (data.containsKey("stateChange")) {
         _changeState(data["stateChange"]);
       }
-      switch (data) {
-        case "start":
-          _stopwatch?.start();
-
-          _timer?.cancel();
-          _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-            print("timer");
-            if (_stopwatch?.isRunning ?? false) {
-              FlutterForegroundTask.updateService(
-                notificationTitle: "bruh wtf",
-                notificationText: formatStopwatchInMinutesSeconds(_stopwatch!.elapsed)
-              );
-            }
-          });
-          break;
-        case "reset":
-          _stopwatch?.reset();
-          break;
-        case "stop":
-          _stopwatch?.stop();
-          break;
-      }
     }
   }
 
   void _changeState(dynamic stateChangeData) {
-
+    String newState = stateChangeData["newState"];
+    switch (newState) {
+      case "startFocus":
+        if (_stopwatch!.isRunning) {
+          _stopwatch?.reset();
+        } else {
+          _stopwatch?.start();
+        }
+        FlutterForegroundTask.updateService(
+            notificationText: "Focusing"
+        );
+        break;
+      case "startRest":
+        if (_stopwatch!.isRunning) {
+          _stopwatch?.reset();
+        } else {
+          _stopwatch?.start();
+        }
+        FlutterForegroundTask.updateService(
+            notificationText: "Resting"
+        );
+        break;
+    }
   }
 
   // Called when the notification button is pressed.
