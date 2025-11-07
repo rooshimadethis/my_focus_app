@@ -11,7 +11,11 @@ void initTimerService() {
         channelId: 'foreground_service',
         channelName: 'Foreground Service Notification',
         channelDescription: 'This notification appears when the foreground service is running.',
-        onlyAlertOnce: true,
+        // onlyAlertOnce: true,
+        priority: NotificationPriority.HIGH,
+        enableVibration: true,
+        channelImportance: NotificationChannelImportance.HIGH,
+        onlyAlertOnce: true
       ),
       iosNotificationOptions: IOSNotificationOptions(
           showNotification: true,
@@ -61,7 +65,6 @@ class ForegroundTimerHandler extends TaskHandler {
     //This works as a test, but maybe repeatEvent would be better
     //This needs to update the notification and send data back to the UI
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      print(_stopwatch?.elapsed);
         //Update Notification
         FlutterForegroundTask.updateService(
             notificationTitle: formatStopwatchInMinutesSeconds(
@@ -94,7 +97,6 @@ class ForegroundTimerHandler extends TaskHandler {
   @override
   void onReceiveData(Object data) {
     super.onReceiveData(data);
-    print("data received");
 
     if (data is Map<String, dynamic>) {
       if (data.containsKey("stateChange")) {

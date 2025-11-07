@@ -19,6 +19,7 @@ class _WelcomePageState extends State<WelcomePage> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _requestPermissions();
+      //TODO if foreground service is already active, skip
     });
   }
 

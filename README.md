@@ -6,6 +6,8 @@ Focus/Pomodoro app specifically for me
 
 [] end session button which stops the foreground service
 [] don't start the task if already running and the app opens again
+    - right now it just white screens
+[] vibrate on button click
 [] Ignore battery optimization not working
 [] Open/start brain.fm?
 [] custom notification for service

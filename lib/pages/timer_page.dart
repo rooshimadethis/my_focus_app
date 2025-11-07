@@ -47,8 +47,9 @@ class _TimerPageState extends State<TimerPage> {
   void _onReceiveTaskData(Object data) {
     if (data is Map<String, dynamic>) {
       if (data.containsKey("newTime")) {
-        _currentTime = Duration(seconds: data["newTime"]);
-        setState(() {});
+        setState(() {
+          _currentTime = Duration(seconds: data["newTime"]);
+        });
       }
     }
   }
