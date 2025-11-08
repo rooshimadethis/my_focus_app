@@ -66,15 +66,16 @@ class _WelcomePageState extends State<WelcomePage> {
               height: 250.0,
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(
-                      color: Colors.grey,
-                      width: 1.5
-                  )
+                  // border: Border.all(
+                  //     color: Colors.white,
+                  //     width: 1.5
+                  // ),
+                color: Theme.of(context).colorScheme.surface
               ),
               child: const Icon(
                 Icons.sentiment_very_satisfied,
                 size: 100.0,
-                color: Colors.grey,
+                color: Colors.blue,
               ),
             ),
             Text(

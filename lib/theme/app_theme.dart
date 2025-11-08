@@ -17,7 +17,9 @@ class AppTheme {
 
   static final ThemeData lightTheme = ThemeData(
     useMaterial3: true,
+    fontFamily: 'StackSans',
     colorScheme: lightColorScheme,
+    scaffoldBackgroundColor: Colors.blue,
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(

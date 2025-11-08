@@ -144,7 +144,9 @@ class _TimerPageState extends State<TimerPage> {
                         height: 150.0,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            border: Border.all(color: Colors.grey, width: 1.5)),
+                            // border: Border.all(color: Colors.grey, width: 1.5),
+                            color: Theme.of(context).colorScheme.surface
+                        ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           spacing: 1.0,
@@ -160,7 +162,9 @@ class _TimerPageState extends State<TimerPage> {
                         height: 250.0,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            border: Border.all(color: Colors.grey, width: 1.5)),
+                            // border: Border.all(color: Colors.grey, width: 1.5),
+                            color: Theme.of(context).colorScheme.surface
+                        ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           spacing: 3.0,
@@ -199,7 +203,7 @@ class _TimerPageState extends State<TimerPage> {
               minimumSize: const Size(17, 25),
               maximumSize: const Size(35, 30),
               numberOfParticles: 20,
-              gravity: 0.5,
+              gravity: 0.2,
               minBlastForce: 10,
               particleDrag: 0.05,
               colors: [Colors.blue, Colors.blueAccent, Colors.lightBlueAccent, Colors.deepPurpleAccent, Colors.deepPurple, Colors.pink, Colors.yellow],
