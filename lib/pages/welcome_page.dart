@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:my_focus_app/pages/timer_page.dart';
+import 'package:my_focus_app/theme/app_theme.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
@@ -67,15 +68,15 @@ class _WelcomePageState extends State<WelcomePage> {
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   // border: Border.all(
-                  //     color: Colors.white,
-                  //     width: 1.5
+                  //     color: Theme.of(context).colorScheme.primary,
+                  //     width: 2
                   // ),
-                color: Theme.of(context).colorScheme.surface
+                  color: Theme.of(context).colorScheme.surface
               ),
               child: const Icon(
                 Icons.sentiment_very_satisfied,
                 size: 100.0,
-                color: Colors.blue,
+                color: Colors.purple,
               ),
             ),
             Text(
@@ -86,16 +87,16 @@ class _WelcomePageState extends State<WelcomePage> {
                 onPressed: () {
                   HapticFeedback.mediumImpact();
                   Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const TimerPage())
+                      context,
+                      MaterialPageRoute(builder: (context) => const TimerPage())
                   );
                 },
                 style: ButtonStyle(
-                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(3.0)
-                        )
-                    )
+                  shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4.0)
+                      )
+                  ),
                 ),
                 child: const Text('Begin working session'))
           ],

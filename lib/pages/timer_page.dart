@@ -119,7 +119,6 @@ class _TimerPageState extends State<TimerPage> {
         children: [
           Scaffold(
             appBar: AppBar(
-              elevation: 0,
               automaticallyImplyLeading: false,
               actions: [
                 TextButton(
@@ -143,9 +142,17 @@ class _TimerPageState extends State<TimerPage> {
                         width: 150.0,
                         height: 150.0,
                         decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            // border: Border.all(color: Colors.grey, width: 1.5),
-                            color: Theme.of(context).colorScheme.surface
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Theme.of(context).colorScheme.primary, width: 2),
+                          color: Theme.of(context).colorScheme.surface,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1), // Shadow color
+                              spreadRadius: 2, // How far the shadow spreads
+                              blurRadius: 10,  // How soft the shadow is
+                              offset: Offset(0, 4), // Moves the shadow down a bit
+                            ),
+                          ]
                         ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -162,7 +169,7 @@ class _TimerPageState extends State<TimerPage> {
                         height: 250.0,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            // border: Border.all(color: Colors.grey, width: 1.5),
+                            border: Border.all(color: Theme.of(context).colorScheme.primary, width: 2),
                             color: Theme.of(context).colorScheme.surface
                         ),
                         child: Column(

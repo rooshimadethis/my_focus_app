@@ -4,13 +4,13 @@ class AppTheme {
   AppTheme._();
 
   static const Color _lightSeedColor = Color(0xFF654FE3);
-  static const Color _darkSeedColor = Colors.lightBlue;
+  static const Color _darkSeedColor = Color(0xFF654FE3);
   //TODO will prob want focus and rest themes
 
   //TODO I think I'm just gonna have to manually make my own palettes
-  static final ColorScheme lightColorScheme = ColorScheme.fromSeed(
-      seedColor: _lightSeedColor,
-      brightness: Brightness.light
+  static final ColorScheme darkColorScheme = ColorScheme.fromSeed(
+      seedColor: _darkSeedColor,
+      brightness: Brightness.dark
   );
 
   static const double _commonBorderRadius = 3.0;
@@ -18,8 +18,8 @@ class AppTheme {
   static final ThemeData lightTheme = ThemeData(
     useMaterial3: true,
     fontFamily: 'StackSans',
-    colorScheme: lightColorScheme,
-    scaffoldBackgroundColor: Colors.blue,
+    colorScheme: darkColorScheme,
+    scaffoldBackgroundColor: darkColorScheme.surface,
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
@@ -32,7 +32,8 @@ class AppTheme {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(_commonBorderRadius),
         ),
-        backgroundColor: _lightSeedColor
+        backgroundColor: _darkSeedColor,
+        foregroundColor: Colors.white
       ),
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
