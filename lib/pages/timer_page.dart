@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:my_focus_app/utils/formatters.dart';
 
@@ -168,6 +169,7 @@ class _TimerPageState extends State<TimerPage> {
                   } else if (_currentTimerState == TimerState.rest) {
                     _startFocus();
                   }
+                  HapticFeedback.mediumImpact();
                 },
                 child: Text(mainButtonText))
           ],

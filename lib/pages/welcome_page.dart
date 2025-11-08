@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:my_focus_app/pages/timer_page.dart';
 
@@ -82,6 +83,7 @@ class _WelcomePageState extends State<WelcomePage> {
             ),
             FilledButton(
                 onPressed: () {
+                  HapticFeedback.mediumImpact();
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const TimerPage())
