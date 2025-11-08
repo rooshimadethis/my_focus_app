@@ -1,9 +1,7 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:my_focus_app/utils/formatters.dart';
-import 'dart:async';
 
 import '../utils/foreground_timer_task.dart';
 
@@ -84,6 +82,11 @@ class _TimerPageState extends State<TimerPage> {
     FlutterForegroundTask.sendDataToTask(data);
   }
 
+  void endSession() {
+
+    FlutterForegroundTask.stopService();
+  }
+
   @override
   Widget build(BuildContext context) {
     String previousText;
@@ -104,6 +107,17 @@ class _TimerPageState extends State<TimerPage> {
     }
 
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        actions: [
+          TextButton(
+              onPressed: () {
+                endSession();
+              },
+              child: Text("End Session"))
+        ],
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

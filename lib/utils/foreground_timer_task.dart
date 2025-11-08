@@ -37,6 +37,9 @@ Future<ServiceRequestResult> startTimerService() async {
       serviceId: 1337,
       notificationTitle: '00:00',
       notificationText: 'Focusing',
+      notificationIcon: const NotificationIcon(
+          metaDataName: 'me.rooshi.my_focus_app.SIT_ICON'
+      ),
       notificationButtons: [
         const NotificationButton(id: 'hello', text: 'hello')
       ],
