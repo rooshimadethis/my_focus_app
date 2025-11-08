@@ -6,7 +6,6 @@ Focus/Pomodoro app specifically for me
 
 [] don't start the task if already running and the app opens again
     - right now it just white screens
-[] vibrate on button click
 [] 2 app themes, 1 for focus and 1 for rest blue, green
 [] Ignore battery optimization not working
 [] Open/start brain.fm?
@@ -18,6 +17,8 @@ Focus/Pomodoro app specifically for me
 - don't start service until notification request is accepted
 - move to home page
 [x] end session button which stops the foreground service
+[x] vibrate on button click
+
 
 ## TODOs
 [] Android Foreground activity

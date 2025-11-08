@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return WithForegroundTask(
         child: MaterialApp(
-          title: 'My Focus Timer',
+          title: "Rooshi's Focus App",
           theme: AppTheme.lightTheme,
           home: const WelcomePage(),
         )

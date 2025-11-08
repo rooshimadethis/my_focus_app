@@ -1,8 +1,12 @@
 
+import 'dart:math';
+
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:my_focus_app/utils/formatters.dart';
+import 'package:vibration/vibration.dart';
 
 import '../utils/foreground_timer_task.dart';
 
@@ -23,6 +27,8 @@ class _TimerPageState extends State<TimerPage> {
   Duration _currentTime = Duration();
   Duration _previousTime = Duration();
 
+  late ConfettiController _confettiController;
+
   @override
   void initState() {
     super.initState();
@@ -34,11 +40,13 @@ class _TimerPageState extends State<TimerPage> {
       startTimerService();
     });
 
+    _confettiController = ConfettiController(duration: Duration(seconds: 3));
   }
 
   @override
   void dispose() {
     FlutterForegroundTask.removeTaskDataCallback(_onReceiveTaskData);
+    _confettiController.dispose();
     super.dispose();
   }
 
@@ -107,74 +115,97 @@ class _TimerPageState extends State<TimerPage> {
         break;
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        actions: [
-          TextButton(
-              onPressed: () {
-                endSession();
-              },
-              child: Text("End Session"))
-        ],
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Column(
-              children: [
-                Container(
-                  width: 150.0,
-                  height: 150.0,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.grey, width: 1.5)),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    spacing: 1.0,
-                    children: [
-                      Text(previousText, style: Theme.of(context).textTheme.bodySmall),
-                      Text(formatStopwatchInMinutesSeconds(_previousTime), style: Theme.of(context).textTheme.displaySmall),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 40.0),
-                Container(
-                  width: 250.0,
-                  height: 250.0,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.grey, width: 1.5)),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    spacing: 3.0,
-                    children: [
-                      Text('Current Block', style: Theme.of(context).textTheme.bodyLarge),
-                      Text(formatStopwatchInMinutesSeconds(_currentTime), style: Theme.of(context).textTheme.displayLarge),
-                      Text(statusText, style: Theme.of(context).textTheme.titleLarge)
-                    ],
-                  ),
-                ),
+    return Stack(
+        children: [
+          Scaffold(
+            appBar: AppBar(
+              elevation: 0,
+              automaticallyImplyLeading: false,
+              actions: [
+                TextButton(
+                    onPressed: () async {
+                      endSession();
+                      if (await Vibration.hasVibrator()) {
+                        Vibration.vibrate(pattern: [100, 100, 180, 100, 100, 400]);
+                      }
+                      _confettiController.play();
+                    },
+                    child: Text("End Session"))
               ],
             ),
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Column(
+                    children: [
+                      Container(
+                        width: 150.0,
+                        height: 150.0,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.grey, width: 1.5)),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          spacing: 1.0,
+                          children: [
+                            Text(previousText, style: Theme.of(context).textTheme.bodySmall),
+                            Text(formatStopwatchInMinutesSeconds(_previousTime), style: Theme.of(context).textTheme.displaySmall),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 40.0),
+                      Container(
+                        width: 250.0,
+                        height: 250.0,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.grey, width: 1.5)),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          spacing: 3.0,
+                          children: [
+                            Text('Current Block', style: Theme.of(context).textTheme.bodyLarge),
+                            Text(formatStopwatchInMinutesSeconds(_currentTime), style: Theme.of(context).textTheme.displayLarge),
+                            Text(statusText, style: Theme.of(context).textTheme.titleLarge)
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
 
-            const SizedBox(height: 40.0),
+                  const SizedBox(height: 40.0),
 
-            FilledButton(
-                onPressed: () {
-                  if (_currentTimerState == TimerState.focus) {
-                    _startRest();
-                  } else if (_currentTimerState == TimerState.rest) {
-                    _startFocus();
-                  }
-                  HapticFeedback.mediumImpact();
-                },
-                child: Text(mainButtonText))
-          ],
-        ),
-      ),
+                  FilledButton(
+                      onPressed: () {
+                        if (_currentTimerState == TimerState.focus) {
+                          _startRest();
+                        } else if (_currentTimerState == TimerState.rest) {
+                          _startFocus();
+                        }
+                        HapticFeedback.mediumImpact();
+                      },
+                      child: Text(mainButtonText))
+                ],
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.topRight,
+            child: ConfettiWidget(
+              confettiController: _confettiController,
+              blastDirection: pi,
+              emissionFrequency: 0.05,
+              minimumSize: const Size(17, 25),
+              maximumSize: const Size(35, 30),
+              numberOfParticles: 20,
+              gravity: 0.5,
+              minBlastForce: 10,
+              particleDrag: 0.05,
+              colors: [Colors.blue, Colors.blueAccent, Colors.lightBlueAccent, Colors.deepPurpleAccent, Colors.deepPurple, Colors.pink, Colors.yellow],
+            ),
+          )
+        ]
     );
   }
 }
