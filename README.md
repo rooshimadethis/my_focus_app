@@ -5,6 +5,7 @@ Focus/Pomodoro app specifically for me
 ## Fix
 
 [] if the service is already running, jump to the timer view 
+[] plus minus current timer
 [] kill the service after 2 hours in either state
 [] Open/start brain.fm
 [] 2 app themes, 1 for focus and 1 for rest blue, green
