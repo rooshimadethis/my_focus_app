@@ -4,11 +4,12 @@ Focus/Pomodoro app specifically for me
 
 ## Fix
 
-[] don't start the task if already running and the app opens again
-    - right now it just white screens
+[] if the service is already running, jump to the timer view 
+[] kill the service after 2 hours in either state
+[] Open/start brain.fm
 [] 2 app themes, 1 for focus and 1 for rest blue, green
 [] Ignore battery optimization not working
-[] Open/start brain.fm?
+
 [] custom notification for service
     - apparently flutter_foreground_task doesn't allow for it. If I want it later, 
         I would need to find another lib or implement it myself
