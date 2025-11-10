@@ -8,6 +8,7 @@ Focus/Pomodoro app specifically for me
 [] kill the service after 2 hours in either state
 [] Open/start brain.fm
 [] 2 app themes, 1 for focus and 1 for rest blue, green
+[] flat circles to floating discs
 [] Ignore battery optimization not working
 
 [] custom notification for service
